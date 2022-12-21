@@ -1,0 +1,24 @@
+users
+- id (integer, primary key)
+- email (string)
+- phone (string)
+- password (string)
+
+profiles
+- id (integer, primary key)
+- user_id (integer, foreign key to users.id)
+- first_name (string)
+- last_name (string)
+- role (string)
+
+posts
+- id (integer, primary key)
+- user_id (integer, foreign key to users.id)
+- title (string)
+- post (string)
+
+comments
+- id (integer, primary key)
+- post_id (integer, foreign key to posts.id)
+- user_id (integer, foreign key to users.id)
+- comment (string)
