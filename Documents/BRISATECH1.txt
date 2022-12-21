@@ -1,0 +1,62 @@
+<?php
+
+// Include the necessary libraries
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
+require 'vendor/autoload.php';
+
+// Create a new Slim app
+$app = new \Slim\App;
+
+// Create lists to store our registered users, profiles, and posts
+$users = [];
+$profiles = [];
+$posts = [];
+$comments = [];
+
+// Define the route for user registration
+$app->post('/api/v1/register', function (Request $request, Response $response) use (&$users) {
+    // Get the request data
+    $data = $request->getParsedBody();
+
+    // Extract the fields from the request data
+    $email = $data['email'];
+    $phone = $data['phone'];
+    $password = $data['password'];
+    $confirm_password = $data['confirm_password'];
+
+    // Validate that the passwords match
+    if ($password != $confirm_password) {
+        return $response->withJson(['error' => 'Passwords do not match'], 400);
+    }
+
+    // Create a user object with the provided information
+    $user = [
+        'email' => $email,
+        'phone' => $phone,
+        'password' => $password
+    ];
+
+    // Add the user to the list of registered users
+    $users[] = $user;
+
+    return $response->withJson(['message' => 'User successfully registered'], 201);
+});
+
+// Define the route for creating a profile
+$app->post('/api/v1/profiles', function (Request $request, Response $response) use (&$profiles) {
+    // Get the request data
+    $data = $request->getParsedBody();
+
+    // Extract the fields from the request data
+    $user_id = $data['user_id'];
+    $first_name = $data['first_name'];
+    $last_name = $data['last_name'];
+    $role = $data['role'];
+
+    // Create a profile object with the provided information
+    $profile = [
+        'user_id' => $user_id,
+        'first_name' => $first_name,
+        'last_name' => $last_name,
